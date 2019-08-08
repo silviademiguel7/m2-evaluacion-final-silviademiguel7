@@ -20,7 +20,11 @@ body {
 }
 .containerLookfor{
   grid-column: auto;
+  padding: 10px;
   background-color: blue;
+}
+.form{
+  display: flex;
 }
 .containerMain{
   background-color: pink;
@@ -38,8 +42,46 @@ body {
   align-items: center;
   justify-content:center;
   background-color: aqua;
+  color: white;
+  padding: 10px;
 }
 .liResultsTitle{
   text-align: center;
+  display: inline-block;
+
+}
+.favorites{
+  padding: 0px;
+}
+.liFavoriteTitle{
+  margin-right: 10px;
+}
+.liFavorites{
+  display: flex;
+  align-items: center;
+}
+.containerMain .favorite{
+  background-color: white;
+  color:aqua;
+  .liResultsTitle::before{
+    content: "\f005";
+    font-weight: 900;
+  }
+
+}
+.btnFav{
+  border-radius: 100%;
+  background-color: black;
+  width: 20px;
+  height: 20px;
+  border:none;
+
+}
+.btnFav::before{
+  content: 'X'; // here is your X(cross) sign.
+  color:white;
+  background-color: black;
+  font-weight: 500;
+
 }
 

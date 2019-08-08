@@ -24,14 +24,31 @@ function init(){
 //Funcion de resetear lista de resultados
 function deleteListResults() {
   listResults.innerHTML = '';
+
 }
 //Funcion de pintar li a la lista
 function paintLi(tituloSerie, image) {
-  //Resetear la ul
-  listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
-  <img src="${image}" alt="${tituloSerie}">
-  <h2 class="liResultsTitle">${tituloSerie}</h2>
-  </li>`;
+  //Consulto localSorage favorites
+  const favorites = JSON.parse(localStorage.getItem('favoritos'));
+  //recorro el array
+  console.log(favorites)
+
+    if(favorites.includes(tituloSerie)){
+      listResults.innerHTML += `<li class="liResults favorite" data-title='${tituloSerie}'>
+      <img src="${image}" alt="${tituloSerie}">
+      <h2 class="liResultsTitle">${tituloSerie}</h2>
+      </li>`;
+    }else{
+      listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
+      <img src="${image}" alt="${tituloSerie}">
+      <h2 class="liResultsTitle">${tituloSerie}</h2>
+     </li>`;
+  }
+
+  //si el contenido del array coincide con tituloSerie add classe favorita
+  //si no pinta sin clase favorite
+
+
   return listResults;
 
 }
@@ -43,7 +60,30 @@ function addListener(listResults) {
     li.addEventListener('click', savedFavorites);
   }
 }
+function deleteFav(event){
+  //eliminar de fav el titulo
 
+  const favorites= JSON.parse(localStorage.getItem('favoritos'));
+  //console.log(favorites);
+  const favoritesName=event.currentTarget.getAttribute('data-id');
+  //console.log('boton',favoritesName);
+  const index = favorites.indexOf(favoritesName);
+  if (index > -1) {
+    favorites.splice(index, 1);
+  }
+  paintedFavorites(favorites);
+  localStorage.setItem('favoritos',JSON.stringify(favorites));
+  //Quitar la clase favorite al li de resultados
+  const liFav=document.querySelectorAll('.favorite');
+  console.log(liFav);
+  for(const item of liFav){
+    if(item.getAttribute('data-title')===favoritesName){
+      item.classList.remove('favorite');
+    };
+  }
+
+
+}
 //Funcion que pinta los favoritos y anade nueva clase favorita al elemento clickado
 function paintedFavorites(favorites){
   //resetea la lista
@@ -51,10 +91,15 @@ function paintedFavorites(favorites){
   //Recoger el titulo
   for(const fav of favorites){
     //add a lista de favorites
-  listFavorites.innerHTML+=`<li class="liFavorites"><p class="liFavoriteTitle">${fav}</p>
-  <button class="bntFav">Eliminar de favoritos</button>
-  </li>`;
+    listFavorites.innerHTML+=`<li class="liFavorites"><p class="liFavoriteTitle">${fav}</p>
+    <button class="btnFav" data-id="${fav}"></button>
+    </li>`;
   }
+  const btnDeleteFav=document.querySelectorAll('.btnFav');
+  for(const btnD of btnDeleteFav){
+    btnD.addEventListener('click',deleteFav);
+  }
+
 }
 
 function savedFavorites(event) {
@@ -83,7 +128,7 @@ function savedFavorites(event) {
   //Guardo en localStorage los favoritos
   localStorage.setItem('favoritos',JSON.stringify(favs));
   //Pinto los favoritos
-  paintedFavorites(JSON.parse(localStorage.getItem('favoritos')))
+  paintedFavorites(JSON.parse(localStorage.getItem('favoritos')));
 }
 
 
@@ -115,7 +160,7 @@ function petition() {
       //console.log(listResults);
       addListener(listResults);
       //A cada li tengo que hacerle un listerner cuando hago click
-    })
+    });
 
 }
 
