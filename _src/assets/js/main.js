@@ -26,31 +26,31 @@ function deleteListResults() {
   listResults.innerHTML = '';
 
 }
-//Funcion de pintar li a la lista
+//Funcion de pintar li a la lista de resultados
 function paintLi(tituloSerie, image) {
   //Consulto localSorage favorites
   const favorites = JSON.parse(localStorage.getItem('favoritos'));
   //recorro el array
-  console.log(favorites)
-
+  //console.log(favorites)
+  if(favorites){
     if(favorites.includes(tituloSerie)){
-      listResults.innerHTML += `<li class="liResults favorite" data-title='${tituloSerie}'>
+      listResults.innerHTML += `<li class="liResults favorite" data-title='{tituloSerie}'>
       <img src="${image}" alt="${tituloSerie}">
       <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
     }else{
       listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
-      <img src="${image}" alt="${tituloSerie}">
-      <h2 class="liResultsTitle">${tituloSerie}</h2>
-     </li>`;
+       <img src="${image}" alt="${tituloSerie}">
+       <h2 class="liResultsTitle">${tituloSerie}</h2>
+      </li>`;
+    }
+  }else{
+    listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
+       <img src="${image}" alt="${tituloSerie}">
+       <h2 class="liResultsTitle">${tituloSerie}</h2>
+      </li>`;
   }
-
-  //si el contenido del array coincide con tituloSerie add classe favorita
-  //si no pinta sin clase favorite
-
-
   return listResults;
-
 }
 
 //Funcion que pone listener a cada li de la lista listResults
@@ -62,7 +62,6 @@ function addListener(listResults) {
 }
 function deleteFav(event){
   //eliminar de fav el titulo
-
   const favorites= JSON.parse(localStorage.getItem('favoritos'));
   //console.log(favorites);
   const favoritesName=event.currentTarget.getAttribute('data-id');
@@ -75,14 +74,12 @@ function deleteFav(event){
   localStorage.setItem('favoritos',JSON.stringify(favorites));
   //Quitar la clase favorite al li de resultados
   const liFav=document.querySelectorAll('.favorite');
-  console.log(liFav);
+  //console.log(liFav);
   for(const item of liFav){
     if(item.getAttribute('data-title')===favoritesName){
       item.classList.remove('favorite');
-    };
+    }
   }
-
-
 }
 //Funcion que pinta los favoritos y anade nueva clase favorita al elemento clickado
 function paintedFavorites(favorites){

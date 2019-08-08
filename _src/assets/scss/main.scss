@@ -4,30 +4,39 @@ body {
 	height: 100vh;
 }
 .page{
-  background-color: gray;
+  color: rgb(128, 18, 91);
   display: grid;
   grid-template-rows: auto 1fr;
 }
 .header__page{
   text-align: center;
   grid-row: auto;
-  background-color: antiquewhite;
+  //background-color: antiquewhite;
 }
 .main{
-  background-color: red;
+  //background-color: red;
   display: grid;
   grid-template-columns: auto 1fr;
 }
 .containerLookfor{
   grid-column: auto;
   padding: 10px;
-  background-color: blue;
+  //background-color: blue;
+}
+.btn{
+  background-color: rgb(128, 18, 91);
+  color: pink;
+}
+.inputText{
+  border-style: none;
+  border-bottom: pink solid 2px;
+  color:gray;
 }
 .form{
   display: flex;
 }
 .containerMain{
-  background-color: pink;
+  //background-color: pink;
 }
 .listResults{
   list-style: none;
@@ -41,8 +50,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content:center;
-  background-color: aqua;
-  color: white;
+  background-color: pink;
+  color: rgb(128, 18, 91);
   padding: 10px;
 }
 .liResultsTitle{
@@ -52,6 +61,7 @@ body {
 }
 .favorites{
   padding: 0px;
+  color: gray;
 }
 .liFavoriteTitle{
   margin-right: 10px;
@@ -61,13 +71,12 @@ body {
   align-items: center;
 }
 .containerMain .favorite{
-  background-color: white;
-  color:aqua;
+  background-color:rgb(128, 18, 91);
+  color: pink;
   .liResultsTitle::before{
     content: "\f005";
     font-weight: 900;
   }
-
 }
 .btnFav{
   border-radius: 100%;
