@@ -76,22 +76,23 @@ body {
   color: pink;
   .liResultsTitle::before{
     content: "\f005";
+    font-family: "Font Awesome 5 Pro";
     font-weight: 900;
   }
 }
 .btnFav{
-  border-radius: 100%;
-  background-color: black;
-  width: 20px;
-  height: 20px;
-  border:none;
+  border: 1px solid #f2f2f2;
+  padding: 8px;
 
 }
 .btnFav::before{
-  content: 'X'; // here is your X(cross) sign.
-  color:white;
-  background-color: black;
-  font-weight: 500;
+  content: '\f2ed'; // here is your X(cross) sign.
+  color: rgb(107, 106, 106);
+  font-size: 16px;
+  font-family: "Font Awesome 5 Pro";
 
 }
 
+button {
+  padding: 0 0;
+}
