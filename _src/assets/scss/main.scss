@@ -25,3 +25,21 @@ body {
 .containerMain{
   background-color: pink;
 }
+.listResults{
+  list-style: none;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-flow: row;
+}
+.liResults{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:center;
+  background-color: aqua;
+}
+.liResultsTitle{
+  text-align: center;
+}
+
