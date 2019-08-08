@@ -13,9 +13,13 @@ const listFavorites = document.querySelector('.favorites');
 //guardar la url de la API
 const url=' http://api.tvmaze.com/search/shows?q=';
 
-
+//Funcion de resetear lista de resultados
+function deleteListResults(){
+  listResults.innerHTML='';
+}
 //Funcion de pintar li a la lista
 function paintLi(tituloSerie,image){
+  //Resetear la ul
   listResults.innerHTML+=`<li class="liResults">
   <img src="${image}" alt="${tituloSerie}">
   <h2 class="liResultsTitle">${tituloSerie}</h2>
@@ -39,7 +43,9 @@ function addFavorites(event){
   //Recoger el titulo
   const titleFavorite =event.currentTarget.querySelector('.liResultsTitle').innerHTML;
   // Meter el titulo en la lista de favoritos
-  listFavorites.innerHTML+=`<li class="liFavorites">${titleFavorite}</li>`;
+  listFavorites.innerHTML+=`<li class="liFavorites"><p class="liFavoriteTitle">${titleFavorite}</p>
+  <button class="bntFav">Eliminar de favoritos</button>
+  </li>`;
 
 }
 
@@ -53,6 +59,7 @@ function petition(){
     .then(response=>response.json())
     .then(data=> {
       //recorrer el array de resultados y cada resultado hacer un li. Cada li tiene que tener el nombre y la imagen de cada reultado
+      deleteListResults();
       let image='';
       let tituloSerie='';
       for(const serie of data){
