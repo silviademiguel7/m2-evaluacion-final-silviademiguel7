@@ -1,0 +1,27 @@
+@import 'core/settings';
+body {
+	margin: 0;
+	height: 100vh;
+}
+.page{
+  background-color: gray;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.header__page{
+  text-align: center;
+  grid-row: auto;
+  background-color: antiquewhite;
+}
+.main{
+  background-color: red;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+.containerLookfor{
+  grid-column: auto;
+  background-color: blue;
+}
+.containerMain{
+  background-color: pink;
+}
