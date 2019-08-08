@@ -5,21 +5,21 @@ const textElement = document.querySelector('.inputText');
 const listResults = document.querySelector('.listResults');
 //Recoger el elemnto  lista de favorites
 const listFavorites = document.querySelector('.favorites');
+//Recoger el elemnto  boton
+const btn = document.querySelector('.btn');
 
 //guardar la url de la API
 const url = ' http://api.tvmaze.com/search/shows?q=';
-
-//Favorites array de favoritos
-const favs = [];
+const DEFUALT_IMAGE = 'https://via.placeholder.com/210x295/ffffff/666666/?text=TV';
 
 //funcion de inicializacion
 function init(){
-  if(JSON.parse(localStorage.getItem('favoritos'))){
-    paintedFavorites(JSON.parse(localStorage.getItem('favoritos')));
+  const savedFavorites = JSON.parse(localStorage.getItem('favoritos'));
+  if(savedFavorites){
+    paintedFavorites(savedFavorites);
   }
 
 }
-
 
 //Funcion de resetear lista de resultados
 function deleteListResults() {
@@ -57,21 +57,21 @@ function paintLi(tituloSerie, image) {
 function addListener(listResults) {
   const liSerie = listResults.querySelectorAll('.liResults');
   for (const li of liSerie) {
-    li.addEventListener('click', savedFavorites);
+    li.addEventListener('click', toogleFavorite);
   }
 }
 function deleteFav(event){
   //eliminar de fav el titulo
   const favorites= JSON.parse(localStorage.getItem('favoritos'));
   //console.log(favorites);
-  const favoritesName=event.currentTarget.getAttribute('data-id');
+  const favoritesName=event.currentTarget.getAttribute('data-title');
   //console.log('boton',favoritesName);
   const index = favorites.indexOf(favoritesName);
-  if (index > -1) {
-    favorites.splice(index, 1);
-  }
-  paintedFavorites(favorites);
+
+  favorites.splice(index, 1);
+
   localStorage.setItem('favoritos',JSON.stringify(favorites));
+  paintedFavorites(favorites);
   //Quitar la clase favorite al li de resultados
   const liFav=document.querySelectorAll('.favorite');
   //console.log(liFav);
@@ -82,15 +82,18 @@ function deleteFav(event){
   }
 }
 //Funcion que pinta los favoritos y anade nueva clase favorita al elemento clickado
+// recibe un array de favoritos Ejemplo ['glee', 'glue']
 function paintedFavorites(favorites){
   //resetea la lista
   listFavorites.innerHTML='';
   //Recoger el titulo
   for(const fav of favorites){
     //add a lista de favorites
-    listFavorites.innerHTML+=`<li class="liFavorites"><p class="liFavoriteTitle">${fav}</p>
-    <button class="btnFav" data-id="${fav}"></button>
-    </li>`;
+    listFavorites.innerHTML+=`
+      <li class="liFavorites">
+        <p class="liFavoriteTitle">${fav}</p>
+        <button class="btnFav" data-title="${fav}"></button>
+      </li>`;
   }
   const btnDeleteFav=document.querySelectorAll('.btnFav');
   for(const btnD of btnDeleteFav){
@@ -99,7 +102,7 @@ function paintedFavorites(favorites){
 
 }
 
-function savedFavorites(event) {
+function toogleFavorite(event) {
   // item= que li he clickado, que serie
   const item = event.currentTarget;
   //el nombre de la serie favorita es favoritesName
@@ -108,6 +111,8 @@ function savedFavorites(event) {
   //Si ese li ya era favorito le quito la clase favorita y si no se la pongo
   event.currentTarget.classList.toggle('favorite');
   //Compruebo que clase tiene, si es favorito o no
+  //Favorites array de favoritos
+  const favs = JSON.parse(localStorage.getItem('favoritos')) || [];
   //Si tiene la clse favorita lo guado en fa
   if (item.classList.contains('favorite')) {
     // lo guardo en el array solo si no existe
@@ -129,7 +134,7 @@ function savedFavorites(event) {
 }
 
 
-function petition() {
+function search() {
 
   //Recoger el valor del input
   const textInput = textElement.value;
@@ -142,17 +147,14 @@ function petition() {
       let image = '';
       let tituloSerie = '';
       for (const serie of data) {
-        const imageFull = null;
         tituloSerie = serie.show.name;
         //Si no exite imagen la imagen tiene que ser por defecto
-        if (imageFull === serie.show.image) {
-          image = 'https://via.placeholder.com/210x295/ffffff/666666/?text=TV';
-          paintLi(tituloSerie, image);
+        if (!serie.show.image) {
+          image = DEFUALT_IMAGE;
         } else {
           image = serie.show.image.medium;
-          tituloSerie = serie.show.name;
-          paintLi(tituloSerie, image);
         }
+        paintLi(tituloSerie, image);
       }
       //console.log(listResults);
       addListener(listResults);
@@ -162,7 +164,7 @@ function petition() {
 }
 
 //Recoger el valor del input al hacer click
-const btn = document.querySelector('.btn');
-btn.addEventListener('click', petition);
+
+btn.addEventListener('click', search);
 
 window.onload = init;
