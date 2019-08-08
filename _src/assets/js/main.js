@@ -12,6 +12,15 @@ const url = ' http://api.tvmaze.com/search/shows?q=';
 //Favorites array de favoritos
 const favs = [];
 
+//funcion de inicializacion
+function init(){
+  if(JSON.parse(localStorage.getItem('favoritos'))){
+    paintedFavorites(JSON.parse(localStorage.getItem('favoritos')));
+  }
+
+}
+
+
 //Funcion de resetear lista de resultados
 function deleteListResults() {
   listResults.innerHTML = '';
@@ -110,16 +119,8 @@ function petition() {
 
 }
 
-
-
-
-
-
-
-
-
-
-
 //Recoger el valor del input al hacer click
 const btn = document.querySelector('.btn');
 btn.addEventListener('click', petition);
+
+window.onload = init;
