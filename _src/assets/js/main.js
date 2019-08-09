@@ -9,16 +9,15 @@ const listFavorites = document.querySelector('.favorites');
 const btn = document.querySelector('.btn');
 
 //guardar la url de la API
-const url = ' http://api.tvmaze.com/search/shows?q=';
+//const url = ' http://api.tvmaze.com/search/shows?q=';
 const DEFUALT_IMAGE = 'https://via.placeholder.com/210x295/ffffff/666666/?text=TV';
 
 //funcion de inicializacion
 function init(){
-  const savedFavorites = JSON.parse(localStorage.getItem('favorites'));
+  const savedFavorites = getFavorites('favorites');
   if(savedFavorites){
     paintedFavorites(savedFavorites);
   }
-
 }
 
 //Funcion de resetear lista de resultados
@@ -29,11 +28,14 @@ function deleteListResults() {
 //Funcion de pintar li a la lista de resultados
 function paintLi(tituloSerie, image,idSerie) {
   //Consulto localSorage favorites
-  const favorites = JSON.parse(localStorage.getItem('favoritos'));
+  const favorites = getFavorites('favorites');
   //recorro el array
-  //console.log(favorites)
+  console.log(favorites);
+  console.log(idSerie);
   if(favorites){
-    if(favorites.includes(tituloSerie)){
+    const index = favorites.findIndex(i => i.id == idSerie);
+    //console.log(index);
+    if(index !== -1){
       listResults.innerHTML += `<li class="liResults favorite" data-title="${tituloSerie}" data-id="${idSerie}" data-img="${image}">
       <img src="${image}" alt="${tituloSerie}">
       <h2 class="liResultsTitle">${tituloSerie}</h2>
@@ -65,9 +67,9 @@ function deleteFav(event){
   const favorites= getFavorites('favorites');
   //console.log(favorites);
   const favoritesId=event.currentTarget.getAttribute('data-id');
-  console.log('boton',favoritesId);
-  const index = favorites.findIndex(i => i.id === favoritesId);
-  console.log(index);
+  //console.log('boton',favoritesId);
+  const index = favorites.findIndex(i => i.id == favoritesId);
+  //console.log(index);
   favorites.splice(index, 1);
   setFavorites('favorites',favorites);
   paintedFavorites(favorites);
@@ -84,7 +86,7 @@ function deleteFav(event){
 // recibe un array de favoritos Ejemplo ['glee', 'glue']
 function paintedFavorites(favorites){
   //resetea la lista
-  console.log('entro en la funcion');
+  //console.log('entro en la funcion');
   listFavorites.innerHTML='';
   //Recoger el titulo
   for(const fav of favorites){
@@ -143,7 +145,7 @@ function toogleFavorite(event) {
   }*/
   if(item.classList.contains('favorite')){
     if(favs.length >0){
-      const index = favs.findIndex(i => i.id === favoriteLiId);
+      const index = favs.findIndex(i => i.id == favoriteLiId);
       if(index=== -1){
         favs.push(item.dataset);
       }else{
