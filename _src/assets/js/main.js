@@ -27,25 +27,25 @@ function deleteListResults() {
 
 }
 //Funcion de pintar li a la lista de resultados
-function paintLi(tituloSerie, image) {
+function paintLi(tituloSerie, image,idSerie) {
   //Consulto localSorage favorites
   const favorites = JSON.parse(localStorage.getItem('favoritos'));
   //recorro el array
   //console.log(favorites)
   if(favorites){
     if(favorites.includes(tituloSerie)){
-      listResults.innerHTML += `<li class="liResults favorite" data-title="${tituloSerie}">
+      listResults.innerHTML += `<li class="liResults favorite" data-title="${tituloSerie}" data-id="${idSerie}" data-img="${image}">
       <img src="${image}" alt="${tituloSerie}">
       <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
     }else{
-      listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
+      listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}" data-id="${idSerie}" data-img="${image}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
     }
   }else{
-    listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
+    listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}" data-id="${idSerie}" data-img="${image}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
@@ -62,15 +62,13 @@ function addListener(listResults) {
 }
 function deleteFav(event){
   //eliminar de fav el titulo
-  const favorites= JSON.parse(localStorage.getItem('favoritos'));
+  const favorites= getFavorites('favorites');
   //console.log(favorites);
   const favoritesName=event.currentTarget.getAttribute('data-title');
   //console.log('boton',favoritesName);
   const index = favorites.indexOf(favoritesName);
-
   favorites.splice(index, 1);
-
-  localStorage.setItem('favoritos',JSON.stringify(favorites));
+  setFavorites('favorites',favorites);
   paintedFavorites(favorites);
   //Quitar la clase favorite al li de resultados
   const liFav=document.querySelectorAll('.favorite');
@@ -101,20 +99,33 @@ function paintedFavorites(favorites){
   }
 
 }
-
+function getFavorites(favorites){
+  return JSON.parse(localStorage.getItem(favorites));
+}
+function setFavorites(name,valor){
+  return localStorage.setItem(name,JSON.stringify(valor));
+}
 function toogleFavorite(event) {
   // item= que li he clickado, que serie
   const item = event.currentTarget;
   //el nombre de la serie favorita es favoritesName
-  let favoritesName = item.getAttribute('data-title');
+  //let favoriteId = item.getAttribute('data-id');
+  //let favoriteName=item.getAttribute('data-title');
+  //let favoriteImg=item.getAttribute('data-img');
+  let favoriteLiId= item.dataset.id;
+
+
   //console.log(favorites);
   //Si ese li ya era favorito le quito la clase favorita y si no se la pongo
   event.currentTarget.classList.toggle('favorite');
   //Compruebo que clase tiene, si es favorito o no
   //Favorites array de favoritos
-  const favs = JSON.parse(localStorage.getItem('favoritos')) || [];
+
+  const favs = getFavorites('favorites') || [];
   //Si tiene la clse favorita lo guado en fa
-  if (item.classList.contains('favorite')) {
+  /*if (item.classList.contains('favorite')) {
+
+
     // lo guardo en el array solo si no existe
     if (favs.includes(favoritesName) === false) {
       //meto a favs el nombre de la serie
@@ -126,11 +137,26 @@ function toogleFavorite(event) {
     if (index > -1) {
       favs.splice(index, 1);
     }
+  }*/
+  if(item.classList.contains('favorite')){
+    if(favs.length>0 && !(favs.findIndex(i => i.id === favoriteLiId))){
+      favs.push(item.dataset);
+    }else{
+      favs.push(item.dataset);
+    }
+  }else{
+    for(let i=0;i < favs.length; i++){
+      if(favs[i].id === favoriteLiId){
+        favs.splice(i, 1);
+      }
+    }
   }
   //Guardo en localStorage los favoritos
-  localStorage.setItem('favoritos',JSON.stringify(favs));
+
+  setFavorites('favorites',favs);
   //Pinto los favoritos
-  paintedFavorites(JSON.parse(localStorage.getItem('favoritos')));
+  const favoritesSalved = getFavorites('favorites');
+  paintedFavorites(favoritesSalved);
 }
 function getShowsUrl(querySearch) {
   return `http://api.tvmaze.com/search/shows?q=${querySearch}`;
@@ -150,13 +176,14 @@ function search() {
       let tituloSerie = '';
       for (const serie of data) {
         tituloSerie = serie.show.name;
+        const idSerie=serie.show.id;
         //Si no exite imagen la imagen tiene que ser por defecto
         if (!serie.show.image) {
           image = DEFUALT_IMAGE;
         } else {
           image = serie.show.image.medium;
         }
-        paintLi(tituloSerie, image);
+        paintLi(tituloSerie, image, idSerie);
       }
       //console.log(listResults);
       addListener(listResults);
