@@ -89,8 +89,9 @@ function paintedFavorites(favorites){
     //add a lista de favorites
     listFavorites.innerHTML+=`
       <li class="liFavorites">
-        <p class="liFavoriteTitle">${fav}</p>
-        <button class="btnFav" data-title="${fav}"></button>
+        <img src= "${fav.img}" alta="${fav.title}" class="imgListFav">
+        <p class="liFavoriteTitle">${fav.title}</p>
+        <button class="btnFav" data-title="${fav.title}"></button>
       </li>`;
   }
   const btnDeleteFav=document.querySelectorAll('.btnFav');
