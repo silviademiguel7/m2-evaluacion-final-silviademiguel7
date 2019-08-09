@@ -14,7 +14,7 @@ const DEFUALT_IMAGE = 'https://via.placeholder.com/210x295/ffffff/666666/?text=T
 
 //funcion de inicializacion
 function init(){
-  const savedFavorites = JSON.parse(localStorage.getItem('favoritos'));
+  const savedFavorites = JSON.parse(localStorage.getItem('favorites'));
   if(savedFavorites){
     paintedFavorites(savedFavorites);
   }
@@ -64,9 +64,10 @@ function deleteFav(event){
   //eliminar de fav el titulo
   const favorites= getFavorites('favorites');
   //console.log(favorites);
-  const favoritesName=event.currentTarget.getAttribute('data-title');
-  //console.log('boton',favoritesName);
-  const index = favorites.indexOf(favoritesName);
+  const favoritesId=event.currentTarget.getAttribute('data-id');
+  console.log('boton',favoritesId);
+  const index = favorites.findIndex(i => i.id === favoritesId);
+  console.log(index);
   favorites.splice(index, 1);
   setFavorites('favorites',favorites);
   paintedFavorites(favorites);
@@ -74,7 +75,7 @@ function deleteFav(event){
   const liFav=document.querySelectorAll('.favorite');
   //console.log(liFav);
   for(const item of liFav){
-    if(item.getAttribute('data-title')===favoritesName){
+    if(item.getAttribute('data-id')===favoritesId){
       item.classList.remove('favorite');
     }
   }
@@ -83,6 +84,7 @@ function deleteFav(event){
 // recibe un array de favoritos Ejemplo ['glee', 'glue']
 function paintedFavorites(favorites){
   //resetea la lista
+  console.log('entro en la funcion');
   listFavorites.innerHTML='';
   //Recoger el titulo
   for(const fav of favorites){
@@ -91,7 +93,7 @@ function paintedFavorites(favorites){
       <li class="liFavorites">
         <img src= "${fav.img}" alta="${fav.title}" class="imgListFav">
         <p class="liFavoriteTitle">${fav.title}</p>
-        <button class="btnFav" data-title="${fav.title}"></button>
+        <button class="btnFav" data-title="${fav.title}" data-id="${fav.id}"></button>
       </li>`;
   }
   const btnDeleteFav=document.querySelectorAll('.btnFav');
@@ -140,8 +142,13 @@ function toogleFavorite(event) {
     }
   }*/
   if(item.classList.contains('favorite')){
-    if(favs.length>0 && !(favs.findIndex(i => i.id === favoriteLiId))){
-      favs.push(item.dataset);
+    if(favs.length >0){
+      const index = favs.findIndex(i => i.id === favoriteLiId);
+      if(index=== -1){
+        favs.push(item.dataset);
+      }else{
+        favs.splice(index, 1);
+      }
     }else{
       favs.push(item.dataset);
     }
