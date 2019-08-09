@@ -34,18 +34,18 @@ function paintLi(tituloSerie, image) {
   //console.log(favorites)
   if(favorites){
     if(favorites.includes(tituloSerie)){
-      listResults.innerHTML += `<li class="liResults favorite" data-title='{tituloSerie}'>
+      listResults.innerHTML += `<li class="liResults favorite" data-title="${tituloSerie}">
       <img src="${image}" alt="${tituloSerie}">
       <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
     }else{
-      listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
+      listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
     }
   }else{
-    listResults.innerHTML += `<li class="liResults" data-title='${tituloSerie}'>
+    listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
       </li>`;
@@ -132,14 +132,16 @@ function toogleFavorite(event) {
   //Pinto los favoritos
   paintedFavorites(JSON.parse(localStorage.getItem('favoritos')));
 }
-
+function getShowsUrl(querySearch) {
+  return `http://api.tvmaze.com/search/shows?q=${querySearch}`;
+}
 
 function search() {
-
   //Recoger el valor del input
   const textInput = textElement.value;
+  const searchShowUrl = getShowsUrl(textInput);
   //Hacer la peticion con el valor del input y la API
-  fetch(url + textInput)
+  fetch(searchShowUrl)
     .then(response => response.json())
     .then(data => {
       //recorrer el array de resultados y cada resultado hacer un li. Cada li tiene que tener el nombre y la imagen de cada reultado
@@ -160,7 +162,6 @@ function search() {
       addListener(listResults);
       //A cada li tengo que hacerle un listerner cuando hago click
     });
-
 }
 
 //Recoger el valor del input al hacer click
