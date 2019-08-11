@@ -12,17 +12,14 @@ body {
 .header__page{
   text-align: center;
   grid-row: auto;
-  //background-color: antiquewhite;
 }
 .main{
-  //background-color: red;
   display: grid;
   grid-template-columns: auto 1fr;
 }
 .containerLookfor{
   grid-column: auto;
   padding: 10px;
-  //background-color: blue;
 }
 .btn{
   background-color: rgb(128, 18, 91);
@@ -31,13 +28,10 @@ body {
 .inputText{
   border-style: none;
   border-bottom: pink solid 2px;
-  color:gray;
+  color: gray;
 }
 .form{
   display: flex;
-}
-.containerMain{
-  //background-color: pink;
 }
 .listResults{
   list-style: none;
@@ -58,7 +52,6 @@ body {
 .liResultsTitle{
   text-align: center;
   display: inline-block;
-
 }
 .favorites{
   padding: 0px;
@@ -72,7 +65,7 @@ body {
   align-items: center;
 }
 .containerMain .favorite{
-  background-color:rgb(128, 18, 91);
+  background-color: rgb(128, 18, 91);
   color: pink;
   .liResultsTitle::before{
     content: "\f005";
@@ -83,16 +76,13 @@ body {
 .btnFav{
   border: 1px solid #f2f2f2;
   padding: 8px;
-
 }
 .btnFav::before{
-  content: '\f2ed'; // here is your X(cross) sign.
+  content: '\f2ed';
   color: rgb(107, 106, 106);
   font-size: 16px;
   font-family: "Font Awesome 5 Pro";
-
 }
-
 button {
   padding: 0 0;
 }
