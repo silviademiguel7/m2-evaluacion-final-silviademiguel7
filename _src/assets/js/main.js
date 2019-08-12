@@ -90,8 +90,6 @@ function toogleFavorite(event) {
       const index = favs.findIndex(i => i.id == favoriteLiId);
       if(index === -1){
         favs.push(item.dataset);
-      }else{
-        favs.splice(index,1);
       }
     }else{
       favs.push(item.dataset);
