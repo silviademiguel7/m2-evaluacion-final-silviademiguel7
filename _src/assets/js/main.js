@@ -5,6 +5,13 @@ const listFavorites = document.querySelector('.favorites');
 const btn = document.querySelector('.btn');
 const url = ' http://api.tvmaze.com/search/shows?q=';
 const DEFUALT_IMAGE = 'https://via.placeholder.com/210x295/ffffff/666666/?text=TV';
+function writeTitle(event){
+  const liTitle =event.currentTarget;
+  const p = liTitle.querySelector('.liFavoriteTitle');
+  const titleP = p.innerHTML;
+  console.log(titleP);
+
+}
 function init(){
   const savedFavorites = JSON.parse(localStorage.getItem('favoritos'));
   if(savedFavorites){
@@ -14,24 +21,31 @@ function init(){
 function deleteListResults(){
   listResults.innerHTML = '';
 }
-function paintLi(tituloSerie,image){
+function paintLi(tituloSerie,image,days){
   const favorites = JSON.parse(localStorage.getItem('favoritos'));
+  let element='';
+  for(const day of days){
+    element +=`<li>${day}</li>`;
+  }
   if(favorites){
     if(favorites.includes(tituloSerie)){
       listResults.innerHTML += `<li class="liResults favorite" data-title="${tituloSerie}">
       <img src="${image}" alt="${tituloSerie}">
       <h2 class="liResultsTitle">${tituloSerie}</h2>
+      <ul class="days">${element}</ul>
       </li>`;
     }else{
       listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
+       <ul class="days">${element}</ul>
       </li>`;
     }
   }else{
     listResults.innerHTML += `<li class="liResults" data-title="${tituloSerie}">
        <img src="${image}" alt="${tituloSerie}">
        <h2 class="liResultsTitle">${tituloSerie}</h2>
+       <ul class="days">${element}</ul>
       </li>`;
   }
   return listResults;
@@ -64,6 +78,10 @@ function paintedFavorites(favorites){
         <p class="liFavoriteTitle">${fav}</p>
         <button class="btnFav" data-title="${fav}"></button>
       </li>`;
+  }
+  const liFavorite = document.querySelectorAll('.liFavorites');
+  for(const li of liFavorite){
+    li.addEventListener('click',writeTitle);
   }
   const btnDeleteFav = document.querySelectorAll('.btnFav');
   for(const btnD of btnDeleteFav){
@@ -101,13 +119,14 @@ function search(){
       let image = '';
       let tituloSerie = '';
       for(const serie of data){
+        const days= serie.show.schedule.days;
         tituloSerie = serie.show.name;
         if(!serie.show.image){
           image = DEFUALT_IMAGE;
         }else{
           image = serie.show.image.medium;
         }
-        paintLi(tituloSerie,image);
+        paintLi(tituloSerie,image,days);
       }
       addListener(listResults);
     });
